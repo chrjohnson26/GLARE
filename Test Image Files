@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Size of the heatmap
+heatmap_size = 1000
+
+# Number of random center points
+num_centers = 1
+
+# Generate a random 2D array
+heatmap = np.random.rand(heatmap_size, heatmap_size)
+
+# Generate random center points
+center_points = np.random.randint(0, heatmap_size, size=(num_centers, 2))
+
+# Apply circular gradients around center points
+for center in center_points:
+    center_intensity = np.random.uniform(0.8, 1.0)  # Set a minimum intensity of 0.8
+    radius_factor = np.random.uniform(1, 3)
+    region_radius = int(radius_factor * heatmap_size / 10)
+
+    for i in range(heatmap_size):
+        for j in range(heatmap_size):
+            distance = np.sqrt((i - center[0])**2 + (j - center[1])**2)
+            gradient_value = center_intensity - distance / region_radius
+            heatmap[i, j] += max(0, gradient_value)  # Ensure values are not below zero
+
+# Normalize values to be in the range [0, 1]
+heatmap = np.clip(heatmap, 0, 1)
+
+# Create a heatmap using a colormap (e.g., 'viridis')
+plt.imshow(heatmap, cmap='plasma', interpolation='nearest')
+plt.colorbar()
+plt.title('Random Heatmap with Circular Gradients')
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+plt.show()
